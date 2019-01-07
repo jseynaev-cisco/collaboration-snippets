@@ -1,67 +1,86 @@
 <?php
+# Author: German Cheung
 
-// First get a list of room devices
 include_once('axl.class.php');
+include_once('ris.class.php');
 
-$TELEPRESENCE_EXCLUDE_DX = '
-	select device.name as devicename, typemodel.name as model from device
-	join typemodel on device.tkmodel=typemodel.enum
-	and typemodel.name like "Cisco TelePresence MX200%"
-';
+/*
+* First get a list of devices from AXL API
+*/
 
 // Ask a few things
 $server = readline('server to connect to (AXL must be running): ');
 $username = readline('username with AXL permissions: ');
-$password = readline('password: ');
+echo "password: ";
+$password = preg_replace('/\r?\n$/', '', `stty -echo; head -n1`);
+echo "\n";
 
+// The query
+$DEVICES_SQL = '
+	SELECT device.name AS devicename, typemodel.name AS model FROM device
+	JOIN typemodel ON device.tkmodel=typemodel.enum
+	WHERE typemodel.name LIKE "Cisco TelePresence MX200%"
+';
 
-$_axl = new axl($username, $password, $server);
-$_result = $_axl->doRequest('ExecuteSQLQuery', array('sql' => $TELEPRESENCE_EXCLUDE_DX));
+// Get AXL client and run the sql query
+$_axl = new AXL($username, $password, $server);
+$axl_result = $_axl->doRequest('ExecuteSQLQuery', array('sql' => $DEVICES_SQL));
+print_r($axl_result);
 
-// Go over the list and get IP from RIS
-foreach($_result->return->row as $device) {
-    print_r($device);
-}
+/*
+* Get IP Address of the devices from the RIS API
+*/
 
-// Go over the list and connect to every device checking for errors on touch
-$issues = array();
-foreach($_result->return->row as $device) {
-    // print($device->devicename . "\n");
-}
+$_ris = new RIS($username, $password, $server);
+$ris_result = $_ris->get_IP($axl_result->return->row);
+print_r($ris_result);
 
-$ip = "10.229.54.64";
+/*
+* Now contact each device via web interface and check for errors
+*/
+
+// Ask a few things
 $username = readline('username with admin permissions on devices: ');
-$password = readline('password: ');
+echo "password: ";
+$password = preg_replace('/\r?\n$/', '', `stty -echo; head -n1`);
+echo "\n";
 
-$_ch = curl_init();
-curl_setopt($_ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($_ch, CURLOPT_CONNECTTIMEOUT, 10);
-curl_setopt($_ch, CURLOPT_TIMEOUT, 10);
+$issues = array();
+foreach($axl_result->return->row as $device) {
+    print($device->devicename . "\n");
 
-curl_setopt($_ch, CURLOPT_URL, "https://".$ip."/putxml");
-curl_setopt($_ch, CURLOPT_POST, 1);
-curl_setopt($_ch, CURLOPT_POSTFIELDS, "<Command><Peripherals><List><Type>TouchPanel</Type><Connected>True</Connected></List></Peripherals></Command>");
+    $ip = $ris_result[$device->devicename];
 
-$_token = base64_encode($username.':'.$password);
-$_header = array(
-	'Content-Type: text/xml',
-	'Authorization: Basic '.$_token,
-	);
-curl_setopt($_ch, CURLOPT_HTTPHEADER, $_header);
-curl_setopt($_ch, CURLOPT_SSL_VERIFYPEER, 0);
-curl_setopt($_ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($_ch, CURLOPT_HEADER, 0);
-curl_setopt($_ch, CURLOPT_VERBOSE, 0);
+    $_ch = curl_init();
+    curl_setopt($_ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($_ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($_ch, CURLOPT_TIMEOUT, 10);
 
-$_rep = curl_exec($_ch);
-var_dump($_rep);
-if( ! isset($_ch) )
-    curl_close($_ch);
+    curl_setopt($_ch, CURLOPT_URL, "https://".$ip."/putxml");
+    curl_setopt($_ch, CURLOPT_POST, 1);
+    curl_setopt($_ch, CURLOPT_POSTFIELDS, "<Command><Peripherals><List><Type>TouchPanel</Type><Connected>True</Connected></List></Peripherals></Command>");
 
+    $_token = base64_encode($username.':'.$password);
+    $_header = array(
+    	'Content-Type: text/xml',
+    	'Authorization: Basic '.$_token,
+    	);
+    curl_setopt($_ch, CURLOPT_HTTPHEADER, $_header);
+    curl_setopt($_ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($_ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($_ch, CURLOPT_HEADER, 0);
+    curl_setopt($_ch, CURLOPT_VERBOSE, 0);
+
+    // Todo: parse the below to just find out if there's an issue or not
+    $_rep = curl_exec($_ch);
+    var_dump($_rep);
+    if( ! isset($_ch) )
+        curl_close($_ch);
+}
 
 // Create ticket for issues
 // Not sure how far we can go here, obviously we won't create anything
-
+// Todo: add some pseudo code?  Or go with the SNow code we have?
 
 ?>
 

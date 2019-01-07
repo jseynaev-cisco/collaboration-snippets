@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 
 /**
- * @author Jan Seynaeve at Cisco
+ * @author Jan Seynaeve
  */
 class AXL
 {

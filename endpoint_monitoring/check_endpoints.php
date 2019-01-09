@@ -11,11 +11,14 @@ include_once('ris.class.php');
 // Ask a few things
 $server = readline('server to connect to (AXL must be running): ');
 $username = readline('username with AXL permissions: ');
-echo "password: ";
-$password = preg_replace('/\r?\n$/', '', `stty -echo; head -n1`);
+// A bit of trickery for hiding passwords, this will only work on UX like systems
+echo "Password: ";
+system('stty -echo');
+$password = trim(fgets(STDIN));
+system('stty echo');
 echo "\n";
 
-// The query
+// The query, adjust as needed
 $DEVICES_SQL = '
 	SELECT device.name AS devicename, typemodel.name AS model FROM device
 	JOIN typemodel ON device.tkmodel=typemodel.enum
@@ -41,15 +44,26 @@ print_r($ris_result);
 
 // Ask a few things
 $username = readline('username with admin permissions on devices: ');
-echo "password: ";
-$password = preg_replace('/\r?\n$/', '', `stty -echo; head -n1`);
+// A bit of trickery for hiding passwords, this will only work on UX like systems
+echo "Password: ";
+system('stty -echo');
+$password = trim(fgets(STDIN));
+system('stty echo');
 echo "\n";
 
 $issues = array();
 foreach($axl_result->return->row as $device) {
-    print($device->devicename . "\n");
+    print($device->devicename . ": ");
 
-    $ip = $ris_result[$device->devicename];
+    if (array_key_exists($device->devicename, $ris_result))
+        $ip = $ris_result[$device->devicename];
+    else
+    {
+        // device is not registered correctly, we'll just skip it here
+        // but of course one could also add it to the issues
+        print("not registered (no IP)\n");
+        continue;
+    }
 
     $_ch = curl_init();
     curl_setopt($_ch, CURLOPT_RETURNTRANSFER, 1);
@@ -73,7 +87,16 @@ foreach($axl_result->return->row as $device) {
 
     // Todo: parse the below to just find out if there's an issue or not
     $_rep = curl_exec($_ch);
-    var_dump($_rep);
+    //var_dump($_rep);
+    if (strpos($_rep, '<Device') !== false)
+    {
+        print("Touchpanel found\n");
+    }
+    else
+    {
+        print("Touchpanel not found\n");
+        $issues[] = $device->devicename;
+    }
     if( ! isset($_ch) )
         curl_close($_ch);
 }

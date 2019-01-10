@@ -1,0 +1,40 @@
+<phone>
+    <name>{{ name }}</name>
+    <description>Logged off EM</description>
+    <product>Cisco 9971</product>
+    <model>Cisco 9971</model>
+    <class>Phone</class>
+    <protocol>SIP</protocol>
+    <protocolSide>User</protocolSide>
+    <callingSearchSpaceName>{{ site }} Device</callingSearchSpaceName>
+    <devicePoolName>{{ site }} Phones AMS151-BRU152</devicePoolName>
+    <commonDeviceConfigName>Cisco-User</commonDeviceConfigName>
+    <commonPhoneConfigName>Standard Common Phone Profile</commonPhoneConfigName>
+    <networkLocation>Use System Default</networkLocation>
+    <securityProfileName>Cisco 9971 - Standard SIP Non-Secure Profile</securityProfileName>
+    <sipProfileName>Standard SIP Profile</sipProfileName>
+    <lines>
+        <line>
+            <index>1</index>
+            <dirn>
+                <pattern>{{ dn }}</pattern>
+                <routePartitionName>CORE 8Digit</routePartitionName>
+            </dirn>
+        </line>
+    </lines>
+    <phoneTemplateName>Standard 9971 SIP</phoneTemplateName>
+    <speeddials>
+        <speeddial>
+            <dirn>8888</dirn>
+            <label>Helpdesk</label>
+            <index>1</index>
+        </speeddial>
+        <speeddial>
+            <dirn>{{ reception }}</dirn>
+            <label>Reception</label>
+            <index>2</index>
+        </speeddial>
+    </speeddials>
+    <enableExtensionMobility>true</enableExtensionMobility>
+    <allowCtiControlFlag>true</allowCtiControlFlag>
+</phone>

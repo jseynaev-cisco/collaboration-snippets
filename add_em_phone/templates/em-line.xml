@@ -1,0 +1,9 @@
+<line>
+    <pattern>{{ dn }}</pattern>
+    <description>Logged 0ff EM - TEST CL 2019</description>
+    <usage>Device</usage>
+    <routePartitionName>CORE 8Digit</routePartitionName>
+    <alertingName>Logged 0ff EM</alertingName>
+    <asciiAlertingName>Logged 0ff EM</asciiAlertingName>
+    <shareLineAppearanceCssName>{{ site }} Local</shareLineAppearanceCssName>
+</line>

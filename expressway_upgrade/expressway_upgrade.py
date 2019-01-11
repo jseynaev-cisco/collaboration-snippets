@@ -1,5 +1,5 @@
 """
-:author:
+:author: Graham White
 """
 import subprocess
 import time
@@ -43,28 +43,29 @@ def tshell_reboot(server, password):
     return True
 
 
-# get hostname and root password
-print("What expressway server do you want to upgrade?")
-host = input('Hostname or IP: ')
-print("We need root access for upgrades")
-root_pass = getpass.getpass('root password: ')
+if __name__ == '__main__':
+    # get hostname and root password
+    print("What expressway server do you want to upgrade?")
+    host = input('Hostname or IP: ')
+    print("We need root access for upgrades")
+    root_pass = getpass.getpass('root password: ')
 
-# do backup
-print("starting backup")
-exitcode, data = do_backup(host, root_pass)
-print(exitcode)
-print(data)
+    # do backup
+    print("starting backup")
+    exitcode, data = do_backup(host, root_pass)
+    print(exitcode)
+    print(data)
 
-# copy over image and install
-print("\nfilename of the image to upgrade to(must be in folder 'images')")
-image_filename = input('filename: ')
+    # copy over image and install
+    print("\nfilename of the image to upgrade to(must be in folder 'images')")
+    image_filename = input('filename: ')
 
-print("starting to copy image, this may take a while ...")
-res = do_install(host, 'images/' + image_filename, root_pass)
-print(res)
+    print("starting to copy image, this may take a while ...")
+    res = do_install(host, 'images/' + image_filename, root_pass)
+    print(res)
 
-# reboot
-if tshell_reboot(host, root_pass):
-    print('rebooting ... ')
-else:
-    print('reboot command failed')
+    # reboot
+    if tshell_reboot(host, root_pass):
+        print('rebooting ... ')
+    else:
+        print('reboot command failed')

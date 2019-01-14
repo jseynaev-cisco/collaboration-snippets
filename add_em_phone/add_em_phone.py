@@ -11,6 +11,7 @@ reception = '1111'
 # load the template for the line
 template_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              'templates', 'em-line.xml')
+
 with open(template_file) as _file:
     template = Template(_file.read())
 
@@ -23,6 +24,7 @@ print(line_xml)
 # load the template for the phone
 template_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              'templates', 'em-phone.xml')
+
 with open(template_file) as _file:
     template = Template(_file.read())
 

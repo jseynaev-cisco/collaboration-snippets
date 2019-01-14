@@ -5,7 +5,6 @@ import subprocess
 import time
 import getpass
 
-
 def do_backup(server, password):
     cmd = 'sshpass -p {} ssh -o StrictHostKeyChecking=no root@{} "echo random_key | /sbin/backup.sh"'.format(password, server)
     exitcode, data = subprocess.getstatusoutput(cmd)
@@ -20,8 +19,9 @@ def do_install(server, image, password):
     exitcode, data = subprocess.getstatusoutput(cmd)
     if exitcode:
         return False
-    else:
-        time.sleep(20)
+
+    '''EXPLANATION ON WHAT SLEEP IS FOR AND WHY 20 WAS CHOSEN'''
+    time.sleep(20)
 
     cmd = 'sshpass -p {} ssh -o StrictHostKeyChecking=no root@{} "ls -l /tmp/install*"'.format(password, server)
     while time.time() - starttime < waittime:
@@ -38,10 +38,8 @@ def do_install(server, image, password):
 def tshell_reboot(server, password):
     cmd = 'sshpass -p {} ssh -o StrictHostKeyChecking=no root@{} "echo xCommand Boot | tshell"'.format(password, server)
     exitcode, data = subprocess.getstatusoutput(cmd)
-    if exitcode or 'OK' not in data:
-        return False
-    return True
-
+    '''COLLAPSED THIS LINE, NEEDS TESTING'''
+    return exitcode or 'OK' in data
 
 # get hostname and root password
 print("What expressway server do you want to upgrade?")
@@ -60,6 +58,7 @@ print("\nfilename of the image to upgrade to(must be in folder 'images')")
 image_filename = input('filename: ')
 
 print("starting to copy image, this may take a while ...")
+'''INCONSISTENT DIRECTORY LOOKUP AS TO ADD_EM_PHONE'''
 res = do_install(host, 'images/' + image_filename, root_pass)
 print(res)
 

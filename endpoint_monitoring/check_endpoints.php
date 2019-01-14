@@ -12,6 +12,7 @@ include_once('ris.class.php');
 $server = readline('server to connect to (AXL must be running): ');
 $username = readline('username with AXL permissions: ');
 // A bit of trickery for hiding passwords, this will only work on UX like systems
+'''PASSWORD WILL BE LOGGED HERE AS PLAIN TEXT, DO WE WANT THIS?'''
 echo "Password: ";
 system('stty -echo');
 $password = trim(fgets(STDIN));
@@ -84,7 +85,7 @@ foreach($axl_result->return->row as $device) {
     curl_setopt($_ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($_ch, CURLOPT_HEADER, 0);
     curl_setopt($_ch, CURLOPT_VERBOSE, 0);
-
+    '''WE SHOULD REMOVE THIS'''
     // Todo: parse the below to just find out if there's an issue or not
     $_rep = curl_exec($_ch);
     //var_dump($_rep);
@@ -97,10 +98,12 @@ foreach($axl_result->return->row as $device) {
         print("Touchpanel not found\n");
         $issues[] = $device->devicename;
     }
+    '''LOGIC ERROR?'''
     if( ! isset($_ch) )
         curl_close($_ch);
 }
 
+'''SHOULD REMOVE THESE COMMENTS'''
 // Create ticket for issues
 // Not sure how far we can go here, obviously we won't create anything
 // Todo: add some pseudo code?  Or go with the SNow code we have?

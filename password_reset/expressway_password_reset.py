@@ -20,25 +20,24 @@ if new_pass != new_pass2:
     exit(1)
 
 # Initialise SSH login, make sure to auto accept new keys
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())   # don't do this in production
-try:
-    ssh.connect(host, username="root", password=root_pass, timeout=5, look_for_keys=False)
-except Exception as message:
-    print('Could not login to host {}: {}'.format(host, str(message)))
-    exit(1)
+with paramiko.SSHClient() as ssh:
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())   # don't do this in production
+    try:
+        ssh.connect(host, username="root", password=root_pass, timeout=5, look_for_keys=False)
+    except Exception as message:
+        print('Could not login to host {}: {}'.format(host, str(message)))
+        raise
 
-# we're logged in, change password
-stdin, stdout, stderr = ssh.exec_command('passwd {}'.format(user))
-stdin.write(new_pass+"\n")
-stdin.flush()
-stdin.write(new_pass+"\n")
-stdin.flush()
-exit_status = stdout.channel.recv_exit_status()
+    # we're logged in, change password
+    stdin, stdout, stderr = ssh.exec_command('passwd {}'.format(user))
+    stdin.write(new_pass+"\n")
+    stdin.flush()
+    stdin.write(new_pass+"\n")
+    stdin.flush()
+    exit_status = stdout.channel.recv_exit_status()
 
-if exit_status == 0:
-    print('password changed successfully for {}'.format(user))
-else:
-    print('issue while trying to change password for {}'.format(user))
+    if exit_status == 0:
+        print('password changed successfully for {}'.format(user))
+    else:
+        print('issue while trying to change password for {}'.format(user))
 
-ssh.close()

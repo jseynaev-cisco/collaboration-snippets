@@ -6,8 +6,8 @@
     <class>Phone</class>
     <protocol>SIP</protocol>
     <protocolSide>User</protocolSide>
-    <callingSearchSpaceName>{{ site }} Device</callingSearchSpaceName>
-    <devicePoolName>{{ site }} Phones AMS151-BRU152</devicePoolName>
+    <callingSearchSpaceName>{{ phone_css }}</callingSearchSpaceName>
+    <devicePoolName>{{ device_pool }}</devicePoolName>
     <commonDeviceConfigName>Cisco-User</commonDeviceConfigName>
     <commonPhoneConfigName>Standard Common Phone Profile</commonPhoneConfigName>
     <networkLocation>Use System Default</networkLocation>

@@ -5,5 +5,5 @@
     <routePartitionName>CORE 8Digit</routePartitionName>
     <alertingName>Logged 0ff EM</alertingName>
     <asciiAlertingName>Logged 0ff EM</asciiAlertingName>
-    <shareLineAppearanceCssName>{{ site }} Local</shareLineAppearanceCssName>
+    <shareLineAppearanceCssName>{{ line_css }}</shareLineAppearanceCssName>
 </line>

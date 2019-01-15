@@ -1,5 +1,5 @@
 # collaboration-snippets
-Cisco Live 2018 working code snippets
+Cisco Live 2019 working code snippets
 
 ## Disclaimer
 These snippets are provided as is.  The focus being on a 'simple and working' example that is easy to 
@@ -16,3 +16,4 @@ The scripts are tested on our systems, we didn't do any extensive cross-platform
 try it on Ubuntu.  
 No commandline arguments are needed, the script should ask for everything it needs
 
+use of Paramiko (mention for licensing)

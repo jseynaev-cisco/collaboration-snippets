@@ -4,8 +4,8 @@ We're using Paramiko in Python and Expect module in Perl to run the 'passwd'
 and 'set password user' cli commands.
 
 #### sample output
-```bash
-# python3 expressway_password_reset.py
+```
+$ python3 expressway_password_reset.py
 What expressway server do you want to change a password on?
 Hostname or IP: svl*****
 We need root access for changing passwords
@@ -14,11 +14,11 @@ Please enter username for who to change the password: admin
 New password for admin:
 Please enter new password again:
 password changed successfully for admin
-#
+$
 ```
 
-```bash
-# perl ucm_password_reset.pl
+```
+$ perl ucm_password_reset.pl
 Enter the hostname for the server to reset password: svl******
 Enter the username of the "OS Administrator": ucadmin
 Enter the CURRENT password for "OS Administrator" user "ucadmin":
@@ -43,5 +43,5 @@ Please wait...
 Password updated successfully.
 admin:
 Updated OS Admin password successfully
-#
+$
 ```

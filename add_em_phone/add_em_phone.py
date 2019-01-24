@@ -1,3 +1,7 @@
+"""
+:Authors:  Jan Seynaeve
+"""
+
 import os
 import getpass
 from jinja2 import Template

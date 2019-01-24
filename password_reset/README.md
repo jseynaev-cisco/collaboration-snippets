@@ -1,7 +1,7 @@
-These two scripts will automate changing passwords, on for the expressway and 
-another for the UCM platform  
+These two scripts will automate changing passwords, one for the expressway and 
+another for the UCM platform.  
 We're using Paramiko in Python and Expect module in Perl to run the 'passwd'
-and 'set password user' cli commands
+and 'set password user' cli commands.
 
 #### sample output
 ```bash

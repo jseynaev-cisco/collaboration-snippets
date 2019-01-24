@@ -1,3 +1,7 @@
+"""
+:Authors:  Jan Seynaeve
+"""
+
 import sys
 import json
 import dicttoxml

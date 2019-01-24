@@ -12,7 +12,7 @@ print("We need root access for changing passwords")
 root_pass = getpass.getpass('Current root password: ')
 
 # get username for who to change the password as well as the new password
-user = input("Please enter username for password change: ")
+user = input("Please enter username for who to change the password: ")
 new_pass = getpass.getpass('New password for {}: '.format(user))
 new_pass2 = getpass.getpass('Please enter new password again: ')
 if new_pass != new_pass2:

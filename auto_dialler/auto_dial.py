@@ -3,37 +3,40 @@ import getpass
 from time import sleep
 import speech_recognition as sr
 
-def check_quality_score():
-    AUDIO_FILE = "test.wav"
+
+def check_call():
+    audio_file = "test.wav"
     r = sr.Recognizer()
     try:
-        with sr.AudioFile(AUDIO_FILE) as source:
+        with sr.AudioFile(audio_file) as source:
             audio = r.record(source)
-            output = r.recognize_google(audio)
+            transcription = r.recognize_google(audio)
     except sr.UnknownValueError:
-        output = " Error: Google Speech Recognition could not understand the audio"
+        transcription = \
+            " Error: Google Speech Recognition could not understand the audio"
     except sr.RequestError as e:
-        output = " Error: Could not request results from Google Speech Recognition service; {}".format(e)
+        transcription = \
+            " Error: No results from Google Speech Recognition: {}".format(e)
     except IOError:
-        output = " Error: IO Error"
-    return output
+        transcription = " Error: IO Error"
+    return transcription
 
 
 def register_phone(ucm_host, username, password):
-    output = subprocess.run(['linphonecsh', 'init'])
+    subprocess.run(['linphonecsh', 'init'])
     sleep(5)
 
     print('try to register')
-    output = subprocess.run(
+    subprocess.run(
         ['linphonecsh', 'register',
         '--host', ucm_host,
         '--username', username,
         '--password', password])
     sleep(10)
 
-    output = subprocess.run(['linphonecsh', 'status', 'register'])
-    output = subprocess.run(['linphonecsh', 'generic', 'soundcard use files'])
-    output = subprocess.run(['linphonecsh', "generic", "record test.wav"])
+    subprocess.run(['linphonecsh', 'status', 'register'])
+    subprocess.run(['linphonecsh', 'generic', 'soundcard use files'])
+    subprocess.run(['linphonecsh', "generic", "record test.wav"])
 
 
 if __name__ == '__main__':
@@ -50,12 +53,12 @@ if __name__ == '__main__':
 
     # place the call
     print('place call')
-    output = subprocess.run(
+    subprocess.run(
         ['linphonecsh', 'dial',
          'sip:{}@ucm-em151-ams.cisco.com'.format(number_to_dial)])
 
     sleep(20)       # the dial command above will return immediately
     print('unregister')
-    output = subprocess.run(['linphonecsh', 'exit'])
+    subprocess.run(['linphonecsh', 'exit'])
 
-    print(check_quality_score())
+    print(check_call())

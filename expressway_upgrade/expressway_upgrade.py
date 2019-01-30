@@ -38,6 +38,7 @@ def do_install(server, image, password):
 def tshell_reboot(server, password):
     cmd = 'sshpass -p {} ssh -o StrictHostKeyChecking=no root@{} "echo xCommand Boot | tshell"'.format(password, server)
     exitcode, data = subprocess.getstatusoutput(cmd)
+    print(data)
     if exitcode or 'OK' not in data:
         return False
     return True
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     print(data)
 
     # copy over image and install
-    print("\nfilename of the image to upgrade to(must be in folder 'images')")
+    print("\nfilename of the image to upgrade to (must be in folder 'images')")
     image_filename = input('filename: ')
 
     print("starting to copy image, this may take a while ...")

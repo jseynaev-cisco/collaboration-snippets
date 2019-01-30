@@ -10,6 +10,9 @@ Based on the site, you might also be able to get the 'next available number'
 either from UCM or from a telephony number management system
 
 ### sample output
+This one is a bit elaborate, but is shows the output one gets from both the 
+AXL and the RIS calls
+
 ```
 $ python3 add_em_phone.py
 ucm server and user with UCM AXL privileges

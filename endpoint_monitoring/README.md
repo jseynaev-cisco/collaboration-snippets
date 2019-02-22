@@ -13,11 +13,11 @@ Unzip the file and a folder called "schema" should be present, copy that whole f
 
 #### required: php-soap
 soap library for PHP, install as per your OS/environment  
-e.g. `apt-get install php7.0-soap` for Ubuntu
+e.g. `apt-get install php-soap` for Ubuntu
 
 #### required: php-curl
 soap library for PHP, install as per your OS/environment  
-e.g. `apt-get install php7.0-curl` for Ubuntu
+e.g. `apt-get install php-curl` for Ubuntu
 
 #### Sample output
 ```

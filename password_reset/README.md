@@ -3,6 +3,20 @@ another for the UCM platform.
 We're using Paramiko in Python and Expect module in Perl to run the 'passwd'
 and 'set password user' cli commands.
 
+#### Required for perl
+Expect and IO::Socket::SSL modules, install as per your setup
+e.g. for Ubuntu
+```
+# apt-get install libssl-dev
+# cpan install Net::SSLeay
+# cpan install IO::Socket::SSL
+# cpan install Expect
+```
+
+#### Required for Python
+dicttoxml module
+e.g. ```# pip3 install dicttoxml```
+
 #### sample output
 ```
 $ python3 expressway_password_reset.py
